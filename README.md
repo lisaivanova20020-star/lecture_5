@@ -28,7 +28,38 @@
 - Формирование отчётов по задачам и пользователям.
 - Обработка ошибок с помощью `ValueError`.
 
-## Пример отчёта
+## Пример использования
+
+```python
+from datetime import datetime, timedelta
+from task_system import Priority
+from time_tracking import TimeTrackedTaskManager
+
+manager = TimeTrackedTaskManager()
+
+user = manager.create_user("Алексей", "alexey@company.com")
+
+task = manager.create_task(
+    "REST API",
+    "Описание",
+    Priority.HIGH,
+    datetime.now() + timedelta(days=7)
+)
+
+manager.start_timer(task.task_id, user.user_id)
+
+# Выполнение задачи
+
+manager.stop_timer(task.task_id)
+
+# Получение общего затраченного времени
+print(manager.tracker.get_task_time(task.task_id))
+
+# Формирование отчёта
+print(manager.get_time_report())
+```
+
+Пример результата:
 
 ```python
 {
@@ -40,7 +71,7 @@
 
 ## Тестирование
 
-Запуск всех модульных тестов:
+Запуск модульных тестов:
 
 ```bash
 python3 -m unittest -v
@@ -58,5 +89,5 @@ python3 -m unittest -v
 python3 time_tracking.py
 ```
 
-Программа создаёт задачу `REST API`, пользователя `Алексей`, имитирует 45 минут работы и выводит отчёт с затраченным временем.
+Программа создаёт пользователя `Алексей` и задачу `REST API`, имитирует 45 минут работы и выводит отчёт по затраченному времени.
 
